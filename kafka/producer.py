@@ -1,15 +1,9 @@
 from kafka import KafkaProducer
 import json
-import boto3
-import time
-import random
 
-# Configuración de AWS S3
-S3_BUCKET = 'voting-app-music-data'
-S3_KEY = 'data.json'
-
-# Inicializar cliente de S3
-s3 = boto3.client('s3')
+# Cargar los datos musicales desde el archivo JSON
+with open('music_data.json') as f:
+    music_data_list = json.load(f)
 
 # Configuración del productor de Kafka
 producer = KafkaProducer(
@@ -17,14 +11,9 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
-# Leer datos desde S3
-response = s3.get_object(Bucket=S3_BUCKET, Key=S3_KEY)
-music_data = json.loads(response['Body'].read().decode('utf-8'))
-
-# Enviar datos a Kafka
-for song in music_data:
-    producer.send('top_music', song)
-    print(f'Sent: {song}')
-    time.sleep(1)  # Esperar un segundo antes de enviar el siguiente dato
+# Generar y enviar datos
+for music_data in music_data_list:
+    producer.send('top_music', music_data)
+    print(f'Sent: {music_data}')
 
 producer.flush()  # Asegúrate de enviar todos los mensajes
