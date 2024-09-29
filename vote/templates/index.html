@@ -1,49 +1,121 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>{{option_a}} vs {{option_b}}!</title>
     <base href="/index.html">
-    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="docker-compose, docker, stack">
     <meta name="author" content="Tutum dev team">
     <link rel='stylesheet' href="{{ url_for('static',filename='stylesheets/style.css') }}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  </head>
-  <body>
+</head>
+<body>
     <div id="content-container">
-      <div id="content-container-center">
-        <h3>{{option_a}} vs {{option_b}}!</h3>
-        <form id="choice" name='form' method="POST" action="/">
-          <button id="a" type="submit" name="vote" class="a" value="a">{{option_a}}</button>
-          <button id="b" type="submit" name="vote" class="b" value="b">{{option_b}}</button>
-        </form>
-        <div id="tip">
-          (Tip: you can change your vote)
+        <div id="content-container-center">
+            <h3>{{option_a}} vs {{option_b}}!</h3>
+            <form id="choice" name='form' method="POST" action="/">
+                <button id="a" type="submit" name="vote" class="a" value="a">{{option_a}}</button>
+                <button id="b" type="submit" name="vote" class="b" value="b">{{option_b}}</button>
+            </form>
+
+            <h4>Top Music</h4>
+            <div id="music-container">
+                <ul id="music-list"></ul>
+            </div>
         </div>
-        <div id="hostname">
-          Processed by container ID {{hostname}}
+        
+            <div id="tip">(Tip: you can change your vote)</div>
+            <div id="hostname">Processed by container ID {{hostname}}</div>
+            <div id="recommendations-container">
+                <h4>Recomendaciones de Películas:</h4>
+                <div id="message" style="color: green;"></div> <!-- Mensaje de éxito -->
+                <table id="recommendations-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Calificación</th>
+                            <th>ID de Película</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las recomendaciones se agregarán aquí -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
     </div>
+
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     {% if vote %}
     <script>
-      var vote = "{{vote}}";
+        var vote = "{{vote}}";
 
-      if(vote == "a"){
-        $(".a").prop('disabled', true);
-        $(".a").html('{{option_a}} <i class="fa fa-check-circle"></i>');
-        $(".b").css('opacity','0.5');
-      }
-      if(vote == "b"){
-        $(".b").prop('disabled', true);
-        $(".b").html('{{option_b}} <i class="fa fa-check-circle"></i>');
-        $(".a").css('opacity','0.5');
-      }
+        if (vote == "a") {
+            $(".a").prop('disabled', true);
+            $(".a").html('{{option_a}} <i class="fa fa-check-circle"></i>');
+            $(".b").css('opacity', '0.5');
+        }
+        if (vote == "b") {
+            $(".b").prop('disabled', true);
+            $(".b").html('{{option_b}} <i class="fa fa-check-circle"></i>');
+            $(".a").css('opacity', '0.5');
+        }
     </script>
     {% endif %}
-  </body>
+
+    <script>
+        // Función para cargar recomendaciones desde la API
+        function loadRecommendations() {
+            var userId = 14; // ID del usuario que quieres consultar
+            var apiUrl = 'http://ip172-18-0-69-crspbc0l2o90009hsfd0-5000.direct.labs.play-with-docker.com/recommendations/' + userId; // Cambia 'api' al nombre de tu servicio
+
+            $.get(apiUrl, function(data) {
+                var tableBody = $('#recommendations-table tbody');
+                tableBody.empty(); // Limpiar la tabla antes de llenarla
+                $('#message').text(''); // Limpiar el mensaje anterior
+
+                if (data.length > 0) {
+                    // Mostrar los datos en la tabla
+                    data.forEach(function(item) {
+                        tableBody.append('<tr><td>' + item.Title + '</td><td>' + item.Rating + '</td><td>' + item.MovieID + '</td></tr>');
+                    });
+                    $('#message').text('Se encontraron ' + data.length + ' recomendaciones.'); // Mensaje de éxito
+                } else {
+                    $('#message').text('No se encontraron recomendaciones.'); // Mensaje si no hay datos
+                }
+            }).fail(function() {
+                console.error('Error al cargar las recomendaciones');
+                $('#message').text('Error al cargar las recomendaciones.'); // Mensaje de error
+            });
+        }
+
+        // Cargar recomendaciones al cargar la página
+        $(document).ready(function() {
+            loadRecommendations();
+        });
+    </script>
+
+    <script>
+        function fetchMusic() {
+            $.ajax({
+                url: 'http://ec2-3-83-190-187.compute-1.amazonaws.com:9092', // Cambia esto a la URL donde tienes tu consumidor Kafka
+                method: 'GET',
+                success: function(data) {
+                    $('#music-list').empty(); // Limpiar la lista antes de añadir nuevos datos
+                    data.forEach(function(item) {
+                        $('#music-list').append(`<li>${item.artist} - ${item.title}</li>`);
+                    });
+                },
+                error: function() {
+                    console.error('Error al cargar música');
+                }
+            });
+        }
+
+        setInterval(fetchMusic, 1000); // Actualizar la lista cada segundo
+    </script>
+</body>
 </html>
