@@ -99,23 +99,24 @@
     </script>
 
     <script>
-        function fetchMusic() {
-            $.ajax({
-                url: 'http://ec2-54-210-138-53.compute-1.amazonaws.com:9092', // Cambia esto a la URL donde tienes tu consumidor Kafka
-                method: 'GET',
-                success: function(data) {
-                    $('#music-list').empty(); // Limpiar la lista antes de añadir nuevos datos
-                    data.forEach(function(item) {
-                        $('#music-list').append(`<li>${item.artist} - ${item.title}</li>`);
-                    });
-                },
-                error: function() {
-                    console.error('Error al cargar música');
-                }
-            });
-        }
+      function fetchMusic() {
+          var apiUrl = 'http://ec2-54-91-128-232.compute-1.amazonaws.com:5002/api/music'; // Cambia a la URL donde tu consumidor expone la música
+          $.ajax({
+              url: apiUrl,
+              method: 'GET',
+              success: function(data) {
+                  $('#music-list').empty(); // Limpiar la lista antes de añadir nuevos datos
+                  data.forEach(function(item) {
+                      $('#music-list').append(`<li>${item.artist} - ${item.song}</li>`); // Corrige el acceso a 'song'
+                  });
+              },
+              error: function() {
+                  console.error('Error al cargar música');
+              }
+          });
+      }
 
-        setInterval(fetchMusic, 1000); // Actualizar la lista cada segundo
+      setInterval(fetchMusic, 3000); // Actualizar la lista cada 3 segundos
     </script>
 </body>
 </html>

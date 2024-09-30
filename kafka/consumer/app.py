@@ -1,15 +1,18 @@
 from kafka import KafkaConsumer
 from flask import Flask, jsonify
+from flask_cors import CORS  # Importar CORS
 import json
 import threading
 
 app = Flask(__name__)
+CORS(app)  # Habilitar CORS para la aplicación
+
 music_data_list = []
 
 # Configuración del consumidor
 consumer = KafkaConsumer(
     'music_topic',
-    bootstrap_servers='ec2-54-210-138-53.compute-1.amazonaws.com:9092',
+    bootstrap_servers='ec2-54-91-128-232.compute-1.amazonaws.com:9092',
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='music_group',
