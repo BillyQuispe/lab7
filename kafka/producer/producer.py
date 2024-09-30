@@ -9,7 +9,7 @@ with open('music_data.json') as f:
 
 # Configuración del productor de Kafka
 producer = KafkaProducer(
-    bootstrap_servers='kafka:9092',
+    bootstrap_servers='ec2-54-210-138-53.compute-1.amazonaws.com:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
