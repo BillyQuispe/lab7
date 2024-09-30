@@ -12,7 +12,7 @@ music_data_list = []
 # Configuración del consumidor
 consumer = KafkaConsumer(
     'music_topic',
-    bootstrap_servers='ec2-54-91-128-232.compute-1.amazonaws.com:9092',
+    bootstrap_servers='ec2-98-82-15-48.compute-1.amazonaws.com:9092',
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='music_group',

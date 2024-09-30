@@ -9,7 +9,7 @@ with open('music_data.json') as f:
 
 # Configuración del productor de Kafka
 producer = KafkaProducer(
-    bootstrap_servers='ec2-54-91-128-232.compute-1.amazonaws.com:9092',
+    bootstrap_servers='ec2-98-82-15-48.compute-1.amazonaws.com:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),
     max_in_flight_requests_per_connection=1,  # Permitir solo un mensaje en vuelo por conexión
     linger_ms=0,  # Sin retraso en la acumulación
