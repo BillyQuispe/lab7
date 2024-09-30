@@ -1,6 +1,7 @@
 from kafka import KafkaProducer
 import json
-import time  # Asegúrate de importar time si lo usas
+import time
+import random
 
 # Cargar los datos musicales desde el archivo JSON
 with open('music_data.json') as f:
@@ -12,8 +13,9 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
-# Envía cada elemento de la lista en un bucle
-for item in music_data_list:  # Cambia music_data por music_data_list
-    producer.send('music_topic', value=item)
-    print(f"Sent: {item}")
-    time.sleep(5)   # Asegúrate de enviar todos los mensajes
+while True:
+    # Selecciona un artista aleatorio de la lista cargada
+    artist_data = random.choice(music_data_list)
+    producer.send('music_topic', value=artist_data)
+    print(f"Sent: {artist_data}")
+    time.sleep(5)  # Enviar un mensaje cada 5 segundos

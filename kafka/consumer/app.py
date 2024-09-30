@@ -1,10 +1,12 @@
-from flask import Flask, jsonify
 from kafka import KafkaConsumer
+from flask import Flask, jsonify
 import json
+import threading
 
 app = Flask(__name__)
+music_data_list = []
 
-# Configurar el consumidor de Kafka
+# Configuración del consumidor
 consumer = KafkaConsumer(
     'music_topic',
     bootstrap_servers='kafka:9092',
@@ -14,14 +16,17 @@ consumer = KafkaConsumer(
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
-@app.route('/music', methods=['GET'])
-def get_music():
-    music_list = []
+def consume_messages():
+    global music_data_list
     for message in consumer:
-        music_list.append(message.value)
-        if len(music_list) >= 10:  # Recoge los primeros 10 mensajes
-            break
-    return jsonify(music_list)
+        music_data_list.append(message.value)
+        print(f"Received: {message.value}")
+
+@app.route('/api/music', methods=['GET'])
+def get_music():
+    return jsonify(music_data_list)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)  # Flask corriendo en el puerto 5002
+    # Inicia el hilo para consumir mensajes
+    threading.Thread(target=consume_messages, daemon=True).start()
+    app.run(host='0.0.0.0', port=5002)
