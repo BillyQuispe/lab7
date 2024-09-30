@@ -19,33 +19,29 @@
                 <button id="b" type="submit" name="vote" class="b" value="b">{{option_b}}</button>
             </form>
 
+            <h4>Top Music</h4>
+            <div id="music-container">
+                <ul id="music-list"></ul>
+            </div>
+        </div>
+        
             <div id="tip">(Tip: you can change your vote)</div>
             <div id="hostname">Processed by container ID {{hostname}}</div>
-
-            <div class="flex-container">
-                <div class="music-container">
-                    <h4>Top Music</h4>
-                    <div id="music-container">
-                        <ul id="music-list"></ul>
-                    </div>
-                </div>
-
-                <div class="recommendations-container">
-                    <h4>Recomendaciones de Películas:</h4>
-                    <div id="message" style="color: green;"></div> <!-- Mensaje de éxito -->
-                    <table id="recommendations-table">
-                        <thead>
-                            <tr>
-                                <th>Título</th>
-                                <th>Calificación</th>
-                                <th>ID de Película</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Las recomendaciones se agregarán aquí -->
-                        </tbody>
-                    </table>
-                </div>
+            <div id="recommendations-container">
+                <h4>Recomendaciones de Películas:</h4>
+                <div id="message" style="color: green;"></div> <!-- Mensaje de éxito -->
+                <table id="recommendations-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Calificación</th>
+                            <th>ID de Película</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las recomendaciones se agregarán aquí -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -73,8 +69,8 @@
     <script>
         // Función para cargar recomendaciones desde la API
         function loadRecommendations() {
-            var userId = 20; // ID del usuario que quieres consultar
-            var apiUrl = 'http://ip172-18-0-69-crspbc0l2o90009hsfd0-5000.direct.labs.play-with-docker.com/recommendations/' + userId; // Cambia 'api' al nombre de tu servicio
+            var userId = 14; // ID del usuario que quieres consultar
+            var apiUrl = 'http://ip172-18-0-7-crt1p9gl2o90009hspa0-5000.direct.labs.play-with-docker.com/recommendations/' + userId; // Cambia 'api' al nombre de tu servicio
 
             $.get(apiUrl, function(data) {
                 var tableBody = $('#recommendations-table tbody');
@@ -104,7 +100,7 @@
 
     <script>
       function fetchMusic() {
-          var apiUrl = 'http://ec2-98-82-15-48.compute-1.amazonaws.com:5002/api/music'; // Cambia a la URL donde tu consumidor expone la música
+          var apiUrl = 'http://ec2-54-91-128-232.compute-1.amazonaws.com:5002/api/music'; // Cambia a la URL donde tu consumidor expone la música
           $.ajax({
               url: apiUrl,
               method: 'GET',
