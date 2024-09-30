@@ -11,9 +11,8 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
-# Generar y enviar datos
-for music_data in music_data_list:
-    producer.send('top_music', music_data)
-    print(f'Sent: {music_data}')
-
-producer.flush()  # Asegúrate de enviar todos los mensajes
+# Envía cada elemento de la lista en un bucle
+for item in music_data:
+    producer.send('music_topic', value=item)
+    print(f"Sent: {item}")
+    time.sleep(5)   # Asegúrate de enviar todos los mensajes

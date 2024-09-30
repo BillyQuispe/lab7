@@ -101,7 +101,7 @@
     <script>
         function fetchMusic() {
             $.ajax({
-                url: 'http://ec2-3-83-190-187.compute-1.amazonaws.com:9092', // Cambia esto a la URL donde tienes tu consumidor Kafka
+                url: 'http://ec2-54-210-138-53.compute-1.amazonaws.com:9092', // Cambia esto a la URL donde tienes tu consumidor Kafka
                 method: 'GET',
                 success: function(data) {
                     $('#music-list').empty(); // Limpiar la lista antes de añadir nuevos datos
