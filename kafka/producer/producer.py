@@ -4,7 +4,7 @@ import json
 import random
 
 producer = KafkaProducer(
-    bootstrap_servers='ec2-44-201-171-184.compute-1.amazonaws.com:9092',
+    bootstrap_servers='ec2-18-206-251-20.compute-1.amazonaws.com:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
