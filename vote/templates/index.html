@@ -68,7 +68,7 @@
         // Función para cargar recomendaciones desde la API
         function loadRecommendations() {
             var userId = 14; // ID del usuario que quieres consultar
-            var apiUrl = 'http://ip172-18-0-7-crt1p9gl2o90009hspa0-5000.direct.labs.play-with-docker.com/recommendations/' + userId; // Cambia 'api' al nombre de tu servicio
+            var apiUrl = 'http://ip172-18-0-60-cru0l7ol2o9000ama8ng-5000.direct.labs.play-with-docker.com/recommendations/' + userId; // Cambia 'api' al nombre de tu servicio
 
             $.get(apiUrl, function(data) {
                 var tableBody = $('#recommendations-table tbody');
@@ -99,7 +99,7 @@
   // Fetch the data from the Flask API periodically and display it one by one
   async function fetchData() {
       try {
-          const response = await fetch('http://ec2-98-81-255-236.compute-1.amazonaws.com:5002/data');
+          const response = await fetch('http://ec2-44-201-171-184.compute-1.amazonaws.com:5002/data');
           const data = await response.json();
 
           // Function to display the data one by one
