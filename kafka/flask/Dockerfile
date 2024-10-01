@@ -6,10 +6,10 @@ WORKDIR /app
 
 # Copiar los archivos de la aplicación
 COPY requirements.txt requirements.txt
-COPY consumer.py consumer.py
+COPY app.py app.py
 
 # Instalar las dependencias
 RUN pip install -r requirements.txt
 
-# Ejecutar el consumer
-CMD ["python", "consumer.py"]
+# Ejecutar la aplicación Flask
+CMD ["python", "app.py"]
